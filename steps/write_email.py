@@ -12,41 +12,47 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 EMAIL_PROMPT_TEMPLATE = """You are Soren Rosier writing a short outreach email. Follow the template below closely. Use the recipient's first name only.
 
-About Soren:
-- Researcher at Stanford
+About Soren (he can credibly speak to ALL of these):
+- Researcher at Stanford studying student collaboration in math
 - Used to teach and struggled himself with the very challenges his research now addresses
-- Has spent the past decade working with many middle schools on student collaboration in math
-- Built PeerTeach, a structured peer math program where students coach each other during the school day
+- Has spent the past decade working with many middle schools
+- Built PeerTeach, a structured peer math program for grades 3-9 (students coach each other during the school day)
+- Has spent much of his research career studying adaptive/blended learning math software (knows the major platforms and what works)
+- Researches mixed-ability classrooms, math discourse, and stretching teacher capacity through student-led models
 
 Recipient:
 - First name: {first_name}
 - District: {district_name}
 - School: {school}
 
-The strongest PeerTeach-relevant outreach angle for this district (from their LCAP):
-{angle}
+The single strongest angle for this email (from the district's LCAP):
 
-Supporting evidence from their LCAP:
-{evidence}
+District's specific approach: {district_approach}
+Why Soren can speak to it: {soren_expertise}
+Email angle: {angle}
 
-Why this lands for PeerTeach:
-{why_it_lands}
-
-Follow this exact structure (4 short paragraphs + signoff). Adapt the variables, but keep the casual voice and rhythm:
+Follow this exact structure (4 short paragraphs + signoff). The email must reference the district's SPECIFIC approach (not just the gap), and Soren's response must come from his SPECIFIC expertise area on that approach. Keep the casual voice and rhythm.
 
 ---
 Hey {first_name},
 
-I noticed from your LCAP that {district_name} is really focused on [the specific priority from the angle above, phrased naturally in 1 sentence].
+I noticed from your LCAP that {district_name} is [reference their SPECIFIC approach — name the tool, program, model, or staffing structure they described, in 1 sentence].
 
-What I've found working with many middle schools the past decade is [a brief 1-sentence observation about how structured peer math support helps with that exact challenge], which really helps with [the specific challenge].
+What I've found working with many middle schools the past decade is [Soren's specific observation about that approach drawn from his expertise, in 1 sentence]. [Optionally: 1 short sentence with a concrete thought, observation, or question about that approach — not a sales line].
 
 I'm Soren Rosier, I'm a researcher from Stanford. I used to teach and I really struggled myself with [a relatable version of the same challenge]. It actually drove a lot of the research I've done here.
 
-How are you planning on [a natural follow-up question about THEIR plan for solving the specific challenge]? If you're not too busy the next week or two, I'd love to trade notes and share some of the stuff we've been building. I think you might find it really interesting.
+How are you [a specific, curious question about their implementation of that approach — not a generic "how are you improving math"]? If you're not too busy the next week or two, I'd love to trade notes and share some of the stuff we've been building. I think you might find it really interesting.
 
 -Soren
 ---
+
+Key shifts from generic outreach:
+- NEVER say "improve math achievement", "close gaps", "support struggling students" without naming the SPECIFIC method
+- DO name their specific tool / vendor / strategy / program (the district_approach above)
+- DO let Soren speak as someone who has researched that specific thing — not as a PeerTeach salesperson
+- The 2nd paragraph should sound like Soren noticed something interesting about THEIR specific approach, not like he's pitching
+- The closing question should be a real curious question about how they're implementing the approach, not a sales lead-in
 
 Hard rules:
 - NO em dashes (—) or en dashes (–) anywhere
@@ -87,8 +93,8 @@ def generate_email(admin_name, title, district_name, school, top_angle):
         district_name=district_name or "your district",
         school=school or "",
         angle=top_angle.get("angle", ""),
-        evidence=top_angle.get("evidence", ""),
-        why_it_lands=top_angle.get("why_it_lands", ""),
+        district_approach=top_angle.get("district_approach", ""),
+        soren_expertise=top_angle.get("soren_expertise", ""),
     )
 
     msg = client.messages.create(

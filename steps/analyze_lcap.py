@@ -18,41 +18,52 @@ MAX_PAGES_PER_CALL = 50  # bumped from 30 — higher-tier accounts have headroom
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-ANALYSIS_PROMPT = """You are analyzing a California school district's LCAP (Local Control and Accountability Plan) on behalf of PeerTeach.
+ANALYSIS_PROMPT = """You are analyzing a California school district's LCAP on behalf of Dr. Soren Rosier — a Stanford researcher who studies student collaboration in math and built PeerTeach.
 
-PeerTeach context:
-- Stanford-based math peer tutoring program for grades 3-9
-- Helps students coach one another in math through structured peer learning activities during the school day
-- Built by Dr. Soren Rosier, a Stanford researcher focused on student collaboration in math
+Soren's expertise areas (he can credibly speak to ALL of these):
+1. PEER MATH TUTORING — built PeerTeach, a structured peer-to-peer math program for grades 3-9 used during the school day
+2. ADAPTIVE LEARNING / BLENDED LEARNING SOFTWARE — has spent much of his research career studying which math software actually works (DreamBox, ALEKS, ST Math, Khan Academy, i-Ready, Imagine Math, etc.) and has strong opinions on which ones move the needle
+3. MIXED-ABILITY MATH CLASSROOMS — research on heterogeneous grouping, differentiation strategies
+4. MATH DISCOURSE — how to get students explaining mathematical thinking aloud
+5. STRETCHING TEACHER CAPACITY — student-led models that multiply what one teacher can deliver
+6. MATH INTERVENTION DURING THE SCHOOL DAY — Tier 2/3 intervention design, especially for grades 3-9
 
-Your job: read the entire LCAP — including tables, charts, dollar amounts, and embedded images — and identify the THREE strongest PeerTeach-relevant outreach angles for this district, ranked from strongest to weakest.
+Your job: read the LCAP carefully and find the THREE strongest angles where the DISTRICT'S SPECIFIC APPROACH to a math problem overlaps with SOREN'S SPECIFIC EXPERTISE.
 
-What counts as a strong angle:
-The angle must connect a SPECIFIC priority, challenge, action, or budget item in this LCAP to one of these PeerTeach-relevant themes:
-- student-to-student math discourse
-- structured peer collaboration in math
-- math intervention during the school day (esp. grades 3-9)
-- making tutoring feasible without major staffing demands
-- increasing math confidence
-- supporting MTSS or Tier 2 math intervention
-- helping students explain their mathematical thinking
-- teacher capacity challenges (not enough adults to deliver intervention)
-- academic recovery in math
-- scalable student support during the school day
+CRITICAL FRAMING SHIFT:
+Do NOT just identify gaps ("students are X points below standard"). Identify what the district says it is DOING about those gaps — the specific strategies, programs, tools, software, intervention models, staffing structures, or budget allocations they describe. THEN match those specific approaches to Soren's expertise.
 
-What does NOT count as a strong angle:
-- Generic goals that could apply to any district ("improve math achievement", "support all students", "close achievement gaps") UNLESS paired with a specific implementation challenge
+Examples of strong angles (the pattern to follow):
+
+Weak (gap-focused, generic): "EL students are 113 pts below standard in math"
+Strong (approach-focused, specific): "District is using blended learning in mixed-ability classrooms for EL math support — Soren has studied many adaptive math platforms and can share which ones work for ELs"
+
+Weak: "Math achievement is low"
+Strong: "District purchased ST Math for grades 4-8 (Action 2.3, $180K) to address foundational gaps — Soren has researched ST Math specifically and has thoughts on supplementing it with peer discourse"
+
+Weak: "They care about Tier 2 intervention"
+Strong: "District is staffing 2 intervention coaches per site for Tier 2 math (Action 3.4) — Soren has specific opinions on how peer-led models extend coach capacity without doubling staff"
+
+DIG IN. The strongest angles come from concrete specifics in the LCAP:
+- WHAT software/platform/curriculum did they buy or name?
+- WHAT intervention model are they using (pullout, push-in, after-school, blended)?
+- WHAT staffing structure (coaches, intervention specialists, paraprofessionals, tutoring vendors)?
+- WHAT instructional strategy (small groups, station rotation, discourse-focused, project-based)?
+- WHAT vendor or program (Carnegie, AVID, MTSS framework, specific tutoring service)?
+
+If the LCAP names a specific tool, vendor, or method — that IS the angle. The match to Soren's expertise comes from his deep knowledge of those exact tools/methods.
+
+Strict exclusions (do not use as angles):
 - Anything about literacy or reading
-- General SEL, climate, or attendance work unless it explicitly ties to math discourse / peer learning / Tier 2 academic intervention
-- Anything outside the grade 3-9 band (e.g. high-school-only initiatives, TK programs)
-- Broad budget categories without specific intent
-
-The strongest angle is the one with the most concrete overlap between THIS district's stated priorities and PeerTeach's core offering. If something unique about the district makes it an especially strong fit (e.g., they explicitly call out peer learning, or have allocated specific funds for in-school math tutoring), that should be #1.
+- Anything outside grade 3-9 (e.g. K-2, high-school-only, TK)
+- General SEL, attendance, or climate work
+- Pure budget categories with no described approach
+- Vague goals ("close gaps", "support all students") with no described strategy
 
 Evidence rules:
-- Every angle must cite a direct quote or specific figure from the LCAP — page number if visible
-- Do NOT invent facts. If the LCAP doesn't say something, don't claim it
-- Do NOT generalize about what districts "usually" care about — only what THIS district says
+- Every angle must cite a direct quote, figure, page, or action number from the LCAP
+- Do NOT invent that Soren has used or evaluated something. He has broad knowledge of common math platforms and intervention models; only claim familiarity with what's plausibly in the public research literature on common K-12 tools.
+- Do NOT generalize about what districts usually do — only what THIS district says it does
 
 Return ONLY valid JSON. Keep every field SHORT and SCANNABLE — this is read at a glance, not studied.
 
@@ -66,27 +77,33 @@ Length rules (hard):
 
 Strip filler. No "the district is focused on", no "PeerTeach can help", no marketing voice. Just the facts.
 
-Return shape:
+Return shape (every angle must include district_approach AND soren_expertise):
 {
   "district_name": "...",
   "lcap_year": "2024-25",
   "top_angles": [
     {
       "rank": 1,
-      "angle": "LTEL students 90 pts below math standard",
-      "evidence": "Action 1.10: $100K LTEL math support (p.41)",
-      "why_it_lands": "Peer math discourse builds language + math",
+      "district_approach": "Using ST Math + small-group pullout for grades 4-8 math intervention (Action 2.3, $180K, p.45)",
+      "soren_expertise": "Has researched ST Math specifically — knows where it underperforms on word problems and discourse",
+      "angle": "Ask about their ST Math results vs. peer discourse supplement",
       "strength": "strong"
     },
-    { "rank": 2, "angle": "...", "evidence": "...", "why_it_lands": "...", "strength": "..." },
-    { "rank": 3, "angle": "...", "evidence": "...", "why_it_lands": "...", "strength": "..." }
+    { "rank": 2, "district_approach": "...", "soren_expertise": "...", "angle": "...", "strength": "..." },
+    { "rank": 3, "district_approach": "...", "soren_expertise": "...", "angle": "...", "strength": "..." }
   ],
-  "key_metrics": ["Math SBAC: 38% met standard 2023-24", "Chronic absenteeism: 18.4%"],
-  "stated_priorities": ["Tier 2 math intervention", "LTEL support", "Expanded learning"],
-  "warning_flags": ["already using peer tutoring vendor", "...or empty list"]
+  "key_metrics": ["Math SBAC: 38% met standard 2023-24"],
+  "stated_priorities": ["ST Math grades 4-8", "Tier 2 small-group pullout", "LTEL math support"],
+  "warning_flags": ["already using peer tutoring vendor (BAYAC)", "...or empty list"]
 }
 
-Use the example above as a length and tone guide. Adapt the content to THIS district. Always return exactly 3 angles, ranked."""
+Length rules (hard):
+- district_approach: max 25 words — WHAT they're doing + program/tool/vendor name + page/action ref
+- soren_expertise: max 20 words — WHY Soren can credibly speak to that specific approach
+- angle: max 12 words — a one-line opening for the email
+- key_metric / stated_priority / warning_flag: max 10 words each
+
+Always return exactly 3 angles, ranked. Strongest first."""
 
 
 def _pdf_path_for(url):
@@ -158,7 +175,8 @@ def _merge_analyses(analyses):
         if not merged["lcap_year"] and a.get("lcap_year"):
             merged["lcap_year"] = a["lcap_year"]
         for angle in (a.get("top_angles") or []):
-            key = (angle.get("angle") or "").lower()[:80]
+            # dedupe on district_approach first (more specific than angle text)
+            key = (angle.get("district_approach") or angle.get("angle") or "").lower()[:100]
             if key and key not in seen_angles:
                 seen_angles.add(key)
                 candidates.append(angle)
@@ -166,6 +184,11 @@ def _merge_analyses(analyses):
             for item in (a.get(k) or []):
                 if item not in merged[k]:
                     merged[k].append(item)
+
+    # cap merged lists to keep columns scannable
+    merged["key_metrics"] = merged["key_metrics"][:6]
+    merged["stated_priorities"] = merged["stated_priorities"][:6]
+    merged["warning_flags"] = merged["warning_flags"][:5]
 
     candidates.sort(key=lambda a: (
         _STRENGTH_RANK.get((a.get("strength") or "weak").lower(), 3),

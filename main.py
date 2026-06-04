@@ -74,10 +74,10 @@ def _process_row(row_idx, record, lcap_cache):
 
     # Build update payload — always sort by rank ascending
     top_angles = sorted(analysis.get("top_angles") or [], key=lambda a: a.get("rank", 999))
-    angles_str = "\n".join(
+    angles_str = "\n\n".join(
         f"{a.get('rank','?')}. {a.get('angle','')}  [{a.get('strength','?')}]\n"
-        f"   ev: {a.get('evidence','')}\n"
-        f"   fit: {a.get('why_it_lands','')}"
+        f"   approach: {a.get('district_approach','')}\n"
+        f"   soren: {a.get('soren_expertise','')}"
         for a in top_angles)
 
     # Generate the actual email from the #1 angle
