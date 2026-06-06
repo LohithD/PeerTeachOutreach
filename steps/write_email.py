@@ -28,31 +28,33 @@ Recipient:
 The single strongest angle for this email (from the district's LCAP):
 
 District's specific approach: {district_approach}
-Why Soren can speak to it: {soren_expertise}
+Peer-teaching insight Soren has about that approach: {peer_teaching_insight}
 Email angle: {angle}
 
-Follow this exact structure (4 short paragraphs + signoff). The email must reference the district's SPECIFIC approach (not just the gap), and Soren's response must come from his SPECIFIC expertise area on that approach. Keep the casual voice and rhythm.
+Follow this exact structure (4 short paragraphs + signoff). The email must reference the district's SPECIFIC approach AND must explicitly anchor to PEER TEACHING in both the middle paragraph and the closing question. Soren's product (PeerTeach) is about students teaching/coaching/explaining math to each other — that is the through-line of the whole email.
 
 ---
 Hey {first_name},
 
 I noticed from your LCAP that {district_name} is [reference their SPECIFIC approach — name the tool, program, model, or staffing structure they described, in 1 sentence].
 
-What I've found working with many middle schools the past decade is [Soren's specific observation about that approach drawn from his expertise, in 1 sentence]. [Optionally: 1 short sentence with a concrete thought, observation, or question about that approach — not a sales line].
+What I've found in my research is [a specific observation about that approach + an explicit peer-teaching dimension — e.g., where the approach is strong individually but weak on student-to-student interaction, or where peer coaching extends what the approach can do]. [Optionally: 1 short sentence that goes deeper on the peer-teaching connection — what students explaining math to each other adds to what they're already doing].
 
-I'm Soren Rosier, I'm a researcher from Stanford. I used to teach and I really struggled myself with [a relatable version of the same challenge]. It actually drove a lot of the research I've done here.
+I'm Soren Rosier, I'm a researcher from Stanford. I used to teach and I really struggled myself with [a relatable version of the same challenge — frame around getting students to talk to each other about math, or watching kids stay quiet, or kids only learning from the teacher's voice]. It actually drove a lot of the research I've done here.
 
-How are you [a specific, curious question about their implementation of that approach — not a generic "how are you improving math"]? If you're not too busy the next week or two, I'd love to trade notes and share some of the stuff we've been building. I think you might find it really interesting.
+[A specific, curious question that explicitly involves peer teaching — e.g., "How are you building student-to-student explanation into..." or "Have you seen kids coaching each other through..." or "What's the dynamic like when students try to work through this together..." — NEVER a generic "how are you improving math"]. If you're not too busy the next week or two, I'd love to trade notes and share some of the stuff we've been building. I think you might find it really interesting.
 
 -Soren
 ---
 
-Key shifts from generic outreach:
-- NEVER say "improve math achievement", "close gaps", "support struggling students" without naming the SPECIFIC method
-- DO name their specific tool / vendor / strategy / program (the district_approach above)
-- DO let Soren speak as someone who has researched that specific thing — not as a PeerTeach salesperson
-- The 2nd paragraph should sound like Soren noticed something interesting about THEIR specific approach, not like he's pitching
-- The closing question should be a real curious question about how they're implementing the approach, not a sales lead-in
+Hard rules for the writing:
+- Middle paragraph MUST explicitly name peer teaching / students explaining to each other / peer coaching / student-to-student discourse — not just generic "research"
+- Closing question MUST explicitly involve students teaching, coaching, or explaining math to each other
+- Soren's "struggle" line MUST be peer-teaching adjacent (getting kids to talk to each other about math, the silence in math classrooms, etc.) — NOT generic "supporting all students"
+- NEVER write a paragraph where you could swap out PeerTeach for a different ed-tech product and the email still works. Every paragraph needs the peer-teaching signature.
+- Do NOT say "improve math achievement", "close gaps", "support struggling students" as the only framing — always pair with the specific peer-teaching mechanism
+- The tone is curious researcher, not pitch
+- No em dashes, no antithesis grammar, no buzzwords
 
 Hard rules:
 - NO em dashes (—) or en dashes (–) anywhere
@@ -94,7 +96,7 @@ def generate_email(admin_name, title, district_name, school, top_angle):
         school=school or "",
         angle=top_angle.get("angle", ""),
         district_approach=top_angle.get("district_approach", ""),
-        soren_expertise=top_angle.get("soren_expertise", ""),
+        peer_teaching_insight=top_angle.get("peer_teaching_insight", top_angle.get("soren_expertise", "")),
     )
 
     msg = client.messages.create(

@@ -20,29 +20,41 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 ANALYSIS_PROMPT = """You are analyzing a California school district's LCAP on behalf of Dr. Soren Rosier — a Stanford researcher who studies student collaboration in math and built PeerTeach.
 
-Soren's expertise areas (he can credibly speak to ALL of these):
-1. PEER MATH TUTORING — built PeerTeach, a structured peer-to-peer math program for grades 3-9 used during the school day
-2. ADAPTIVE LEARNING / BLENDED LEARNING SOFTWARE — has spent much of his research career studying which math software actually works (DreamBox, ALEKS, ST Math, Khan Academy, i-Ready, Imagine Math, etc.) and has strong opinions on which ones move the needle
-3. MIXED-ABILITY MATH CLASSROOMS — research on heterogeneous grouping, differentiation strategies
-4. MATH DISCOURSE — how to get students explaining mathematical thinking aloud
-5. STRETCHING TEACHER CAPACITY — student-led models that multiply what one teacher can deliver
-6. MATH INTERVENTION DURING THE SCHOOL DAY — Tier 2/3 intervention design, especially for grades 3-9
+Soren's CORE FOCUS (the product, the research, the conversation):
+- PEER TEACHING in math — students teaching, coaching, and explaining math to each other during the school day
+- This is THE thing. Everything else in the email exists to set up a conversation about peer teaching.
+
+Soren's credibility-building expertise (use these as conversation openers that lead BACK to peer teaching):
+1. ADAPTIVE LEARNING / BLENDED LEARNING SOFTWARE — has researched DreamBox, ALEKS, ST Math, Carnegie, i-Ready, Math 180, Imagine Math, Edgenuity, MyPath, Khan Academy, etc. He knows where these tools are strong and where they fail — especially around peer interaction and discourse.
+2. MIXED-ABILITY MATH CLASSROOMS — heterogeneous grouping, how peer teaching plays out across skill levels
+3. MATH DISCOURSE — getting students to explain math thinking aloud to each other (this is peer teaching)
+4. STRETCHING TEACHER CAPACITY — using students as teachers so one teacher reaches more kids
+5. MATH INTERVENTION DURING THE SCHOOL DAY — especially Tier 2 models where peer support multiplies an adult's reach
 
 Your job: read the LCAP carefully and find the THREE strongest angles where the DISTRICT'S SPECIFIC APPROACH to a math problem overlaps with SOREN'S SPECIFIC EXPERTISE.
 
-CRITICAL FRAMING SHIFT:
-Do NOT just identify gaps ("students are X points below standard"). Identify what the district says it is DOING about those gaps — the specific strategies, programs, tools, software, intervention models, staffing structures, or budget allocations they describe. THEN match those specific approaches to Soren's expertise.
+CRITICAL FRAMING (READ TWICE):
+The angle is NOT "Soren is interested in your tool." The angle IS "Soren has a specific peer-teaching insight about your tool."
 
-Examples of strong angles (the pattern to follow):
+Every angle must do BOTH of these:
+(a) Name the district's SPECIFIC approach (tool, vendor, program, staffing model, instructional strategy)
+(b) Connect that approach to PEER TEACHING explicitly — what does peer teaching add to / fix about / extend in their approach
 
-Weak (gap-focused, generic): "EL students are 113 pts below standard in math"
-Strong (approach-focused, specific): "District is using blended learning in mixed-ability classrooms for EL math support — Soren has studied many adaptive math platforms and can share which ones work for ELs"
+A good angle reads: "You're using X. Most schools using X find Y about peer interaction. Curious how Z is showing up for you."
 
-Weak: "Math achievement is low"
-Strong: "District purchased ST Math for grades 4-8 (Action 2.3, $180K) to address foundational gaps — Soren has researched ST Math specifically and has thoughts on supplementing it with peer discourse"
+Examples (the pattern to follow exactly):
 
-Weak: "They care about Tier 2 intervention"
-Strong: "District is staffing 2 intervention coaches per site for Tier 2 math (Action 3.4) — Soren has specific opinions on how peer-led models extend coach capacity without doubling staff"
+Bad (generic): "EL students are 113 pts below standard in math"
+Bad (tool-only): "District uses Math 180 — Soren has researched Math 180"
+Good (tool + peer-teaching insight): "District uses Math 180 for credit recovery. Soren has seen Math 180 students plateau without structured peer explanation built in — curious what they're doing to get students articulating reasoning to each other."
+
+Bad: "Math achievement is low"
+Bad: "ST Math purchased for grades 4-8"
+Good: "ST Math grades 4-8 ($180K, Action 2.3). ST Math individualizes practice but is famously weak on student-to-student discourse — curious how teachers are building peer explanation into the rotation."
+
+Bad: "They care about Tier 2 intervention"
+Bad: "District staffing 2 intervention coaches"
+Good: "Tier 2 model staffed with 2 coaches per site (Action 3.4). Peer-tutoring layered on top is one of the few ways to multiply that coach capacity without doubling spend — has Alameda explored student-led models?"
 
 DIG IN. The strongest angles come from concrete specifics in the LCAP:
 - WHAT software/platform/curriculum did they buy or name?
@@ -77,31 +89,33 @@ Length rules (hard):
 
 Strip filler. No "the district is focused on", no "PeerTeach can help", no marketing voice. Just the facts.
 
-Return shape (every angle must include district_approach AND soren_expertise):
+Return shape:
 {
   "district_name": "...",
   "lcap_year": "2024-25",
   "top_angles": [
     {
       "rank": 1,
-      "district_approach": "Using ST Math + small-group pullout for grades 4-8 math intervention (Action 2.3, $180K, p.45)",
-      "soren_expertise": "Has researched ST Math specifically — knows where it underperforms on word problems and discourse",
-      "angle": "Ask about their ST Math results vs. peer discourse supplement",
+      "district_approach": "Using ST Math + small-group pullout for grades 4-8 (Action 2.3, $180K, p.45)",
+      "peer_teaching_insight": "ST Math is strong on individualized practice but weak on student-to-student discourse — peer-explanation routines layered on top close that loop",
+      "angle": "Curious how teachers are building peer explanation into the ST Math rotation",
       "strength": "strong"
     },
-    { "rank": 2, "district_approach": "...", "soren_expertise": "...", "angle": "...", "strength": "..." },
-    { "rank": 3, "district_approach": "...", "soren_expertise": "...", "angle": "...", "strength": "..." }
+    { "rank": 2, "district_approach": "...", "peer_teaching_insight": "...", "angle": "...", "strength": "..." },
+    { "rank": 3, "district_approach": "...", "peer_teaching_insight": "...", "angle": "...", "strength": "..." }
   ],
   "key_metrics": ["Math SBAC: 38% met standard 2023-24"],
-  "stated_priorities": ["ST Math grades 4-8", "Tier 2 small-group pullout", "LTEL math support"],
-  "warning_flags": ["already using peer tutoring vendor (BAYAC)", "...or empty list"]
+  "stated_priorities": ["ST Math grades 4-8", "Tier 2 small-group pullout"],
+  "warning_flags": ["already using peer tutoring vendor (BAYAC)"]
 }
 
 Length rules (hard):
-- district_approach: max 25 words — WHAT they're doing + program/tool/vendor name + page/action ref
-- soren_expertise: max 20 words — WHY Soren can credibly speak to that specific approach
-- angle: max 12 words — a one-line opening for the email
+- district_approach: max 25 words — name the tool/program/vendor + page/action/budget ref
+- peer_teaching_insight: max 30 words — Soren's specific observation about how PEER TEACHING interacts with their specific approach. MUST contain the words "peer", "student-to-student", "students explain", or similar. NO generic statements.
+- angle: max 15 words — a one-line curious question or observation grounded in peer teaching
 - key_metric / stated_priority / warning_flag: max 10 words each
+
+REJECT any angle whose peer_teaching_insight does not explicitly mention peer interaction, student-to-student work, or students explaining to each other. If you can't make that connection for a given district priority, that priority isn't a strong angle — find a different one.
 
 Always return exactly 3 angles, ranked. Strongest first."""
 

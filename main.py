@@ -77,7 +77,7 @@ def _process_row(row_idx, record, lcap_cache):
     angles_str = "\n\n".join(
         f"{a.get('rank','?')}. {a.get('angle','')}  [{a.get('strength','?')}]\n"
         f"   approach: {a.get('district_approach','')}\n"
-        f"   soren: {a.get('soren_expertise','')}"
+        f"   peer insight: {a.get('peer_teaching_insight','')}"
         for a in top_angles)
 
     # Generate the actual email from the #1 angle
